@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import androidx.annotation.Nullable;
@@ -15,7 +14,6 @@ import java.util.Hashtable;
 import java.util.Random;
 
 public class MyView extends View {
-
     // Contains the position of each line that is currently being drawn.
     Hashtable<Integer, Line> pointersTable = new Hashtable<>();
 
@@ -24,9 +22,6 @@ public class MyView extends View {
 
     // Stores the configuration for the line to draw.
     Paint paint = new Paint();
-
-    // The colour that will be used to draw the line.
-    int color = Color.BLACK;
 
     public MyView(Context context) {
         super(context);
@@ -56,18 +51,13 @@ public class MyView extends View {
         switch (actionMasked) {
             case MotionEvent.ACTION_DOWN:
             case MotionEvent.ACTION_POINTER_DOWN:
-                // Store the start of the line.
+                // Create a line for the new pointer.
                 Point startLine = this.getCurrentPointerPosition(event, pointerId);
-
-                // Calculate the random color for the line
-                this.color = rdm.nextInt();
-
-                // Store the current pointer.
-                this.pointersTable.put(pointerId, this.createLine(startLine.x, startLine.y, color));
+                this.pointersTable.put(pointerId, this.createLine(startLine.x, startLine.y));
 
                 break;
             case MotionEvent.ACTION_MOVE:
-                // Update every pointers line.
+                // Update every pointer's line.
                 for (int pId : this.pointersTable.keySet()) {
                     updatePointerLine(event, pId);
                 }
@@ -79,8 +69,6 @@ public class MyView extends View {
                 this.pointersTable.remove(pointerId);
 
                 break;
-            default:
-                Log.d("APP", "onTouchEvent: event:" + event);
         }
 
         // Invalidate the current view to force the line's redraw.
@@ -111,18 +99,20 @@ public class MyView extends View {
         return paint;
     }
 
-    private Line createLine(float startX, float startY, float endX, float endY, int color) {
+    private Line createLine(float startX, float startY) {
+        return createLine(startX, startY, startX, startY);
+    }
+
+    private Line createLine(float startX, float startY, float endX, float endY) {
         Line line = new Line();
 
-        line.Color = color;
+        // Calculate the random color for the line
+        line.Color = rdm.nextInt();
+
         line.LineStart = new Point((int)startX, (int)startY);
         line.LineEnd = new Point((int)endX, (int)endY);
 
         return line;
-    }
-
-    private Line createLine(float startX, float startY, int color) {
-        return createLine(startX, startY, startX, startY, color);
     }
 
     private void updatePointerLine(MotionEvent event, int pointerKey) {
@@ -144,7 +134,7 @@ public class MyView extends View {
         try {
             MotionEvent.PointerCoords pCoords = new MotionEvent.PointerCoords();
 
-            // To obtain the pointer coordiantes, we need the pointer's index in the event.
+            // To obtain the pointer coordinates, we need the pointer's index in the event.
             int pointerIndex = event.findPointerIndex(pointerId);
             event.getPointerCoords(pointerIndex, pCoords);
 
@@ -155,6 +145,5 @@ public class MyView extends View {
             // The pointer does not exist anymore.
             return new Point(Integer.MIN_VALUE, Integer.MIN_VALUE);
         }
-
     }
 }
