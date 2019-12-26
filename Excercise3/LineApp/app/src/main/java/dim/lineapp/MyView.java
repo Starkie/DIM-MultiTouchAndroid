@@ -16,6 +16,7 @@ import java.util.Random;
 
 public class MyView extends View {
 
+    // Contains the position of each line that is currently being drawn.
     Hashtable<Integer, Line> pointersTable = new Hashtable<>();
 
     // Random number generator, to obtain the color of the current line.
@@ -43,18 +44,6 @@ public class MyView extends View {
         super(context, attrs, defStyleAttr);
 
         this.paint = ConfigurePaint(paint);
-    }
-
-    @Override
-    protected void onDraw(Canvas canvas) {
-        // Draw the stored lines.
-        for (Line line : pointersTable.values()) {
-            // Set the line's color.
-            paint.setColor(line.Color);
-
-            // Draw the line on the stored coordinates of the touch events.
-            canvas.drawLine(line.LineStart.x, line.LineStart.y, line.LineEnd.x, line.LineEnd.y, paint);
-        }
     }
 
     @Override
@@ -97,7 +86,6 @@ public class MyView extends View {
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_POINTER_UP:
-            case MotionEvent.ACTION_CANCEL:
                 // Remove the line of the current pointer.
                 this.pointersTable.remove(pointerId);
 
@@ -110,6 +98,28 @@ public class MyView extends View {
         this.invalidate();
 
         return true;
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        // Draw the stored lines.
+        for (Line line : pointersTable.values()) {
+            // Set the line's color.
+            paint.setColor(line.Color);
+
+            // Draw the line on the stored coordinates of the touch events.
+            canvas.drawLine(line.LineStart.x, line.LineStart.y, line.LineEnd.x, line.LineEnd.y, paint);
+        }
+    }
+
+    private static Paint ConfigurePaint(Paint paint) {
+        paint.setAntiAlias(true);
+        paint.setStrokeWidth(6f);
+        paint.setColor(Color.BLACK);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeJoin(Paint.Join.ROUND);
+
+        return paint;
     }
 
     private Point getCurrentPointerPosition(MotionEvent event, int pointerKey) {
@@ -126,16 +136,6 @@ public class MyView extends View {
             return new Point(Integer.MIN_VALUE, Integer.MIN_VALUE);
         }
 
-    }
-
-    private static Paint ConfigurePaint(Paint paint) {
-        paint.setAntiAlias(true);
-        paint.setStrokeWidth(6f);
-        paint.setColor(Color.BLACK);
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeJoin(Paint.Join.ROUND);
-
-        return paint;
     }
 
     private Line createLine(float startX, float startY, float endX, float endY, int color) {
