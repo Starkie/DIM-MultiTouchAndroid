@@ -4,14 +4,20 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import androidx.annotation.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class MyView extends View {
+
+    List<Line> lines = new ArrayList<>();
 
     // Random number generator, to obtain the color of the current line.
     Random rdm = new Random();
@@ -45,10 +51,18 @@ public class MyView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        // Set the line's color.
-        paint.setColor(this.color);
 
-        // Draw the line on the stored coordinates of the touch events.
+        // Draw the stored lines.
+        for (Line line : lines) {
+            // Set the line's color.
+            paint.setColor(line.Color);
+
+            // Draw the line on the stored coordinates of the touch events.
+            canvas.drawLine(line.LineStart.x, line.LineStart.y, line.LineEnd.x, line.LineEnd.y, paint);
+        }
+
+        // Draw the current line.
+        paint.setColor(this.color);
         canvas.drawLine(this.startX, this.startY, this.endX, this.endY, this.paint);
     }
 
@@ -75,6 +89,10 @@ public class MyView extends View {
 
                 break;
             case MotionEvent.ACTION_UP:
+                // Store the resulting line.
+                Line line = createLine();
+                this.lines.add(line);
+
                 // Reset the line's coordinates.
                 this.endY = this.endX = this.startX = this.startY = -1;
 
@@ -94,5 +112,15 @@ public class MyView extends View {
         paint.setStrokeJoin(Paint.Join.ROUND);
 
         return paint;
+    }
+
+    private Line createLine() {
+        Line line = new Line();
+
+        line.Color = this.color;
+        line.LineStart = new Point((int)this.startX, (int)this.startY);
+        line.LineEnd = new Point((int)this.endX, (int)this.endY);
+
+        return line;
     }
 }
