@@ -143,12 +143,6 @@ public class MyView extends View {
     }
 
     private Line createLine(float startX, float startY, int color) {
-        Line line = new Line();
-
-        line.Color = color;
-        line.LineStart = new Point((int)startX, (int)startY);
-        line.LineEnd = new Point((int)startX, (int)startY);
-
-        return line;
+        return createLine(startX, startY, startX, startY, color);
     }
 }
