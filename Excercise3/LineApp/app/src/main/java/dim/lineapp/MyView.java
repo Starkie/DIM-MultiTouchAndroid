@@ -119,12 +119,22 @@ public class MyView extends View {
         return paint;
     }
 
-    private Line createLine() {
+    private Line createLine(float startX, float startY, float endX, float endY, int color) {
         Line line = new Line();
 
-        line.Color = this.color;
-        line.LineStart = new Point((int)this.startX, (int)this.startY);
-        line.LineEnd = new Point((int)this.endX, (int)this.endY);
+        line.Color = color;
+        line.LineStart = new Point((int)startX, (int)startY);
+        line.LineEnd = new Point((int)endX, (int)endY);
+
+        return line;
+    }
+
+    private Line createLine(float startX, float startY, int color) {
+        Line line = new Line();
+
+        line.Color = color;
+        line.LineStart = new Point((int)startX, (int)startY);
+        line.LineEnd = new Point((int)startX, (int)startY);
 
         return line;
     }
