@@ -80,9 +80,17 @@ public class MyView extends View {
             case MotionEvent.ACTION_MOVE:
                 // Update every pointers line.
                 for (int pointerKey : this.pointersTable.keySet()) {
+                    Line pointerLine = this.pointersTable.get(pointerKey);
+
                     Point point = getCurrentPointerPosition(event, pointerKey);
 
-                    Line pointerLine = this.pointersTable.get(pointerKey);
+                    if(point.x == Integer.MIN_VALUE && point.y == Integer.MIN_VALUE) {
+                        // If invalid coordinates where provided, continue to the next pointer.
+                        // The pointer might have been removed. If it still exists, it will be updated
+                        // in the next ACTION_MOVE event.
+                        continue;
+                    }
+
                     pointerLine.LineEnd = point;
                 }
 
@@ -115,7 +123,7 @@ public class MyView extends View {
         catch (IllegalArgumentException e)
         {
             // The pointer does not exist anymore.
-            return new Point(-1, -1);
+            return new Point(Integer.MIN_VALUE, Integer.MIN_VALUE);
         }
 
     }
