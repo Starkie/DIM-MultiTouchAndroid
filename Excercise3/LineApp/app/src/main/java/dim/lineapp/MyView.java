@@ -68,19 +68,8 @@ public class MyView extends View {
                 break;
             case MotionEvent.ACTION_MOVE:
                 // Update every pointers line.
-                for (int pointerKey : this.pointersTable.keySet()) {
-                    Line pointerLine = this.pointersTable.get(pointerKey);
-
-                    Point point = getCurrentPointerPosition(event, pointerKey);
-
-                    if(point.x == Integer.MIN_VALUE && point.y == Integer.MIN_VALUE) {
-                        // If invalid coordinates where provided, continue to the next pointer.
-                        // The pointer might have been removed. If it still exists, it will be updated
-                        // in the next ACTION_MOVE event.
-                        continue;
-                    }
-
-                    pointerLine.LineEnd = point;
+                for (int pId : this.pointersTable.keySet()) {
+                    updatePointerLine(event, pId);
                 }
 
                 break;
@@ -122,22 +111,6 @@ public class MyView extends View {
         return paint;
     }
 
-    private Point getCurrentPointerPosition(MotionEvent event, int pointerKey) {
-        try {
-            MotionEvent.PointerCoords pCoords = new MotionEvent.PointerCoords();
-
-            event.getPointerCoords(pointerKey, pCoords);
-
-            return new Point((int) pCoords.x, (int) pCoords.y);
-        }
-        catch (IllegalArgumentException e)
-        {
-            // The pointer does not exist anymore.
-            return new Point(Integer.MIN_VALUE, Integer.MIN_VALUE);
-        }
-
-    }
-
     private Line createLine(float startX, float startY, float endX, float endY, int color) {
         Line line = new Line();
 
@@ -150,5 +123,38 @@ public class MyView extends View {
 
     private Line createLine(float startX, float startY, int color) {
         return createLine(startX, startY, startX, startY, color);
+    }
+
+    private void updatePointerLine(MotionEvent event, int pointerKey) {
+        Line pointerLine = this.pointersTable.get(pointerKey);
+
+        Point point = getCurrentPointerPosition(event, pointerKey);
+
+        if(point.x == Integer.MIN_VALUE && point.y == Integer.MIN_VALUE) {
+            // If invalid coordinates where provided, continue to the next pointer.
+            // The pointer might have been removed. If it still exists, it will be updated
+            // in the next ACTION_MOVE event.
+            return;
+        }
+
+        pointerLine.LineEnd = point;
+    }
+
+    private Point getCurrentPointerPosition(MotionEvent event, int pointerId) {
+        try {
+            MotionEvent.PointerCoords pCoords = new MotionEvent.PointerCoords();
+
+            // To obtain the pointer coordiantes, we need the pointer's index in the event.
+            int pointerIndex = event.findPointerIndex(pointerId);
+            event.getPointerCoords(pointerIndex, pCoords);
+
+            return new Point((int) pCoords.x, (int) pCoords.y);
+        }
+        catch (IllegalArgumentException e)
+        {
+            // The pointer does not exist anymore.
+            return new Point(Integer.MIN_VALUE, Integer.MIN_VALUE);
+        }
+
     }
 }
