@@ -47,7 +47,6 @@ public class MyView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-
         // Draw the stored lines.
         for (Line line : pointersTable.values()) {
             // Set the line's color.
@@ -69,14 +68,13 @@ public class MyView extends View {
             case MotionEvent.ACTION_DOWN:
             case MotionEvent.ACTION_POINTER_DOWN:
                 // Store the start of the line.
-                MotionEvent.PointerCoords pointerCoords = new MotionEvent.PointerCoords();
-                event.getPointerCoords(pointerId, pointerCoords);
+                Point startLine = this.getCurrentPointerPosition(event, pointerId);
 
                 // Calculate the random color for the line
                 this.color = rdm.nextInt();
 
                 // Store the current pointer.
-                this.pointersTable.put(pointerId, this.createLine(pointerCoords.x, pointerCoords.y, color));
+                this.pointersTable.put(pointerId, this.createLine(startLine.x, startLine.y, color));
 
                 break;
             case MotionEvent.ACTION_MOVE:
