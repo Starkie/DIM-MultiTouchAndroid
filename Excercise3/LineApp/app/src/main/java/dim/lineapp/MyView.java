@@ -17,7 +17,7 @@ import java.util.Random;
 
 public class MyView extends View {
 
-    List<Line> lines = new ArrayList<>();
+    Hashtable<Integer, Line> pointersTable = new Hashtable<>();
 
     // Random number generator, to obtain the color of the current line.
     Random rdm = new Random();
@@ -53,29 +53,34 @@ public class MyView extends View {
     protected void onDraw(Canvas canvas) {
 
         // Draw the stored lines.
-        for (Line line : lines) {
+        for (Line line : pointersTable.values()) {
             // Set the line's color.
             paint.setColor(line.Color);
 
             // Draw the line on the stored coordinates of the touch events.
             canvas.drawLine(line.LineStart.x, line.LineStart.y, line.LineEnd.x, line.LineEnd.y, paint);
         }
-
-        // Draw the current line.
-        paint.setColor(this.color);
-        canvas.drawLine(this.startX, this.startY, this.endX, this.endY, this.paint);
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        switch (event.getAction()) {
+        int actionMasked = event.getActionMasked();
+        int index = event.getActionIndex();
+
+        int pointerId = event.getPointerId(index);
+
+        switch (actionMasked) {
             case MotionEvent.ACTION_DOWN:
+            case MotionEvent.ACTION_POINTER_DOWN:
                 // Store the start of the line.
-                this.startX = event.getX();
-                this.startY = event.getY();
+                MotionEvent.PointerCoords pointerCoords = new MotionEvent.PointerCoords();
+                event.getPointerCoords(pointerId, pointerCoords);
 
                 // Calculate the random color for the line
                 this.color = rdm.nextInt();
+
+                // Store the current pointer.
+                this.pointersTable.put(pointerId, this.createLine(pointerCoords.x, pointerCoords.y, color));
 
                 break;
             case MotionEvent.ACTION_MOVE:
