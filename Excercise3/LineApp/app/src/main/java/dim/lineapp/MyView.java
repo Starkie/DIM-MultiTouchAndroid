@@ -11,8 +11,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import androidx.annotation.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Hashtable;
 import java.util.Random;
 
 public class MyView extends View {
@@ -24,9 +23,6 @@ public class MyView extends View {
 
     // Stores the configuration for the line to draw.
     Paint paint = new Paint();
-
-    // Stores the coordinates of the touch event to draw the line.
-    float startX, startY, endX, endY;
 
     // The colour that will be used to draw the line.
     int color = Color.BLACK;
@@ -84,27 +80,32 @@ public class MyView extends View {
 
                 break;
             case MotionEvent.ACTION_MOVE:
-            case MotionEvent.ACTION_CANCEL:
-                // Store the end of the line.
-                this.endX = event.getX();
-                this.endY = event.getY();
+                // Update every pointers line.
+                for (int pointerKey : this.pointersTable.keySet()) {
+                    MotionEvent.PointerCoords pCoords = new MotionEvent.PointerCoords();
 
-                // Invalidate the current view to force the line's redraw.
-                this.invalidate();
+                    event.getPointerCoords(pointerKey, pCoords);
+
+                    Point point = new Point((int) pCoords.x, (int) pCoords.y);
+
+                    Line pointerLine = this.pointersTable.get(pointerKey);
+                    pointerLine.LineEnd = point;
+                }
 
                 break;
             case MotionEvent.ACTION_UP:
-                // Store the resulting line.
-                Line line = createLine();
-                this.lines.add(line);
-
-                // Reset the line's coordinates.
-                this.endY = this.endX = this.startX = this.startY = -1;
+            case MotionEvent.ACTION_POINTER_UP:
+            case MotionEvent.ACTION_CANCEL:
+                // Remove the line of the current pointer.
+                this.pointersTable.remove(pointerId);
 
                 break;
             default:
-                Log.i("App", event.toString());
+                Log.d("APP", "onTouchEvent: event:" + event);
         }
+
+        // Invalidate the current view to force the line's redraw.
+        this.invalidate();
 
         return true;
     }
