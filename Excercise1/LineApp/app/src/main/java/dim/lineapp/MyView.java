@@ -78,6 +78,9 @@ public class MyView extends View {
                 // Reset the line's coordinates.
                 this.endY = this.endX = this.startX = this.startY = -1;
 
+                // Invalidate the current view to force the line's redraw.
+                this.invalidate();
+
                 break;
             default:
                 Log.i("App", event.toString());
