@@ -82,11 +82,7 @@ public class MyView extends View {
             case MotionEvent.ACTION_MOVE:
                 // Update every pointers line.
                 for (int pointerKey : this.pointersTable.keySet()) {
-                    MotionEvent.PointerCoords pCoords = new MotionEvent.PointerCoords();
-
-                    event.getPointerCoords(pointerKey, pCoords);
-
-                    Point point = new Point((int) pCoords.x, (int) pCoords.y);
+                    Point point = getCurrentPointerPosition(event, pointerKey);
 
                     Line pointerLine = this.pointersTable.get(pointerKey);
                     pointerLine.LineEnd = point;
@@ -108,6 +104,22 @@ public class MyView extends View {
         this.invalidate();
 
         return true;
+    }
+
+    private Point getCurrentPointerPosition(MotionEvent event, int pointerKey) {
+        try {
+            MotionEvent.PointerCoords pCoords = new MotionEvent.PointerCoords();
+
+            event.getPointerCoords(pointerKey, pCoords);
+
+            return new Point((int) pCoords.x, (int) pCoords.y);
+        }
+        catch (IllegalArgumentException e)
+        {
+            // The pointer does not exist anymore.
+            return new Point(-1, -1);
+        }
+
     }
 
     private static Paint ConfigurePaint(Paint paint) {
