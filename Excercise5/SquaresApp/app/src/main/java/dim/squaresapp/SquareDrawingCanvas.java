@@ -34,6 +34,8 @@ public class SquareDrawingCanvas extends View {
 
     Square currentSquare;
 
+    private int initialGesturePointerId;
+
 
     public SquareDrawingCanvas(Context context) {
         super(context);
@@ -84,13 +86,35 @@ public class SquareDrawingCanvas extends View {
                 Point touchPoint = new Point((int)event.getX(), (int) event.getY());
                 this.currentSquare = this.selectSquare(touchPoint);
 
+                // Track the pointer that started the event.
+                this.initialGesturePointerId = event.getPointerId(event.getActionIndex());
+
                 break;
             case MotionEvent.ACTION_MOVE:
-                if(this.currentSquare != null) {
-                    this.currentSquare.Centre = new Point((int)event.getX(), (int) event.getY());
+                if(this.currentSquare == null) {
+                    break;
                 }
+
+                // Use only the tracked pointer to move the square. Ignore the others.
+                Point position = this.getCurrentPointerPosition(event, this.initialGesturePointerId);
+
+                if (position != null) {
+                    this.currentSquare.Centre = position;
+                }
+
+                break;
+            case MotionEvent.ACTION_POINTER_UP:
+                // If the initial pointer is removed, stop tracking the square.
+                if (event.getPointerId(event.getActionIndex()) == this.initialGesturePointerId)
+                {
+                    this.initialGesturePointerId = -1;
+                    this.currentSquare = null;
+                }
+
+                break;
         }
 
+        // Refer the event to the other listeners.
         this.gestureDetector.onTouchEvent(event);
         this.scaleDetector.onTouchEvent(event);
 
@@ -132,6 +156,24 @@ public class SquareDrawingCanvas extends View {
         }
 
         return null;
+    }
+
+
+    private Point getCurrentPointerPosition(MotionEvent event, int pointerId) {
+        try {
+            MotionEvent.PointerCoords pCoords = new MotionEvent.PointerCoords();
+
+            // To obtain the pointer coordinates, we need the pointer's index in the event.
+            int pointerIndex = event.findPointerIndex(pointerId);
+            event.getPointerCoords(pointerIndex, pCoords);
+
+            return new Point((int) pCoords.x, (int) pCoords.y);
+        }
+        catch (IllegalArgumentException e)
+        {
+            // The pointer does not exist anymore.
+            return null;
+        }
     }
 
     private class SquareScaleLister
