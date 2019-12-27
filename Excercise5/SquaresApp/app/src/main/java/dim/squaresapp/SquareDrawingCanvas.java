@@ -8,6 +8,7 @@ import android.graphics.Point;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 import androidx.annotation.Nullable;
 
@@ -29,11 +30,17 @@ public class SquareDrawingCanvas extends View {
     // Stores the configuration for the line to draw.
     Paint paint = new Paint();
 
+    private ScaleGestureDetector scaleDetector;
+
+    Square currentSquare;
+
+
     public SquareDrawingCanvas(Context context) {
         super(context);
 
         this.paint = ConfigurePaint(paint);
         this.gestureDetector = buildGestureDetector();
+        this.scaleDetector = new ScaleGestureDetector(getContext(), new SquareScaleLister(this));
     }
 
     public SquareDrawingCanvas(Context context, @Nullable AttributeSet attrs) {
@@ -41,6 +48,7 @@ public class SquareDrawingCanvas extends View {
 
         this.paint = ConfigurePaint(paint);
         this.gestureDetector = buildGestureDetector();
+        this.scaleDetector = new ScaleGestureDetector(getContext(), new SquareScaleLister(this));
     }
 
     public SquareDrawingCanvas(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
@@ -48,13 +56,14 @@ public class SquareDrawingCanvas extends View {
 
         this.paint = ConfigurePaint(paint);
         this.gestureDetector = buildGestureDetector();
+        this.scaleDetector = new ScaleGestureDetector(getContext(), new SquareScaleLister(this));
     }
 
     public void addSquare(Point centre) {
         Square square = new Square();
 
         square.Centre = centre;
-        square.Scale = 40;
+        square.Radius = 75;
         square.Color = this.rdm.nextInt();
 
         this.squares.add(square);
@@ -70,7 +79,17 @@ public class SquareDrawingCanvas extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                Point touchPoint = new Point((int)event.getX(), (int) event.getY());
+                this.currentSquare = this.selectSquare(touchPoint);
+
+                break;
+        }
+
         this.gestureDetector.onTouchEvent(event);
+        this.scaleDetector.onTouchEvent(event);
+
         this.invalidate();
 
         return true;
@@ -79,14 +98,14 @@ public class SquareDrawingCanvas extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         // Draw the stored squares.
-        for (Square rect : squares) {
-            paint.setColor(rect.Color);
+        for (Square square : squares) {
+            paint.setColor(square.Color);
 
             canvas.drawRect(
-                    rect.Centre.x - rect.Scale,
-                    rect.Centre.y - rect.Scale,
-                    rect.Centre.x + rect.Scale,
-                    rect.Centre.y + rect.Scale, paint);
+                    square.Centre.x - square.Radius,
+                    square.Centre.y - square.Radius,
+                    square.Centre.x + square.Radius,
+                    square.Centre.y + square.Radius, paint);
         }
     }
 
@@ -98,5 +117,37 @@ public class SquareDrawingCanvas extends View {
         paint.setStrokeJoin(Paint.Join.ROUND);
 
         return paint;
+    }
+
+    private Square selectSquare(Point touchPoint) {
+
+        for (Square s : this.squares) {
+            if(s.isPointInSquareArea(touchPoint)) {
+                return s;
+            }
+        }
+
+        return null;
+    }
+
+    private class SquareScaleLister
+            extends ScaleGestureDetector.SimpleOnScaleGestureListener
+    {
+        private SquareDrawingCanvas squareDrawingCanvas;
+
+        public SquareScaleLister(SquareDrawingCanvas squareDrawingCanvas) {
+            this.squareDrawingCanvas = squareDrawingCanvas;
+        }
+
+        @Override
+        public boolean onScale(ScaleGestureDetector detector) {
+            if (this.squareDrawingCanvas.currentSquare != null) {
+                this.squareDrawingCanvas.currentSquare.scaleSquare(detector.getScaleFactor());
+
+                invalidate();
+            }
+
+            return true;
+        }
     }
 }
