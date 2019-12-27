@@ -12,6 +12,11 @@ public abstract class Figure {
     public int Color;
 
     /**
+     * Represents the point at the centre of the figure.
+     */
+    public Point Centre;
+
+    /**
      * Scales the figure according to the provided scale factor.
      * @param scaleFactor The factor in which to scale the figure.
      */

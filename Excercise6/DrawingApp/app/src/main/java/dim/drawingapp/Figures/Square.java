@@ -11,11 +11,6 @@ public class Square extends Figure {
     private static final float MAX_SQUARE_RADIUS = 200;
 
     /**
-     * Represents the point at the centre of the square.
-     */
-    public Point Centre;
-
-    /**
      * Represents the radius of the square [half-the size of a side].
      */
     public float Radius;

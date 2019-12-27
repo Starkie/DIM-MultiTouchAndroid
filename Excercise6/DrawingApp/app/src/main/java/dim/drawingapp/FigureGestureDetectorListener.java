@@ -4,11 +4,11 @@ import android.graphics.Point;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
 
-public class SquareGestureDetectorListener extends SimpleOnGestureListener {
+public class FigureGestureDetectorListener extends SimpleOnGestureListener {
 
-    private SquareDrawingCanvas parentView;
+    private DrawingCanvasView parentView;
 
-    public SquareGestureDetectorListener(SquareDrawingCanvas parentView)
+    public FigureGestureDetectorListener(DrawingCanvasView parentView)
     {
         this.parentView = parentView;
     }

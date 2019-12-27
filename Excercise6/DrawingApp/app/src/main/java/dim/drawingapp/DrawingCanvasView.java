@@ -17,47 +17,62 @@ import java.util.Random;
 
 import dim.drawingapp.Figures.*;
 
-public class SquareDrawingCanvas extends View {
+/**
+ * A view that enables the drawing of figures in it.
+ */
+public class DrawingCanvasView extends View {
+    // Handler for basic gestures.
     private final GestureDetector gestureDetector;
 
-    // Contains each square to draw.
-    List<Square> squares = new ArrayList<>();
+    // Handler for the pinch-to-scale gesture.
+    private final ScaleGestureDetector scaleDetector;
 
-    // Random number generator, to obtain the color of the current line.
-    Random rdm = new Random();
+    // Contains each figure to draw in the canvas.
+    List<Figure> figures = new ArrayList<>();
 
-    // Stores the configuration for the line to draw.
+    // Stores the configuration for the figure to draw.
     Paint paint = new Paint();
 
-    private ScaleGestureDetector scaleDetector;
+    // Random number generator, to obtain the color of the current figure.
+    Random rdm = new Random();
 
-    Square currentSquare;
+    // The figure that is currently selected.
+    Figure currentFigure;
 
+    // The pointer ID that initiated the current gesture. Used to track the movement of figures.
     private int initialGesturePointerId;
 
-
-    public SquareDrawingCanvas(Context context) {
+    /**
+     * {@inheritDoc}
+     */
+    public DrawingCanvasView(Context context) {
         super(context);
 
         this.paint = ConfigurePaint(paint);
         this.gestureDetector = buildGestureDetector();
-        this.scaleDetector = new ScaleGestureDetector(getContext(), new SquareScaleLister(this));
+        this.scaleDetector = new ScaleGestureDetector(getContext(), new FigureScaleGestureListener(this));
     }
 
-    public SquareDrawingCanvas(Context context, @Nullable AttributeSet attrs) {
+    /**
+     * {@inheritDoc}
+     */
+    public DrawingCanvasView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
 
         this.paint = ConfigurePaint(paint);
         this.gestureDetector = buildGestureDetector();
-        this.scaleDetector = new ScaleGestureDetector(getContext(), new SquareScaleLister(this));
+        this.scaleDetector = new ScaleGestureDetector(getContext(), new FigureScaleGestureListener(this));
     }
 
-    public SquareDrawingCanvas(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    /**
+     * {@inheritDoc}
+     */
+    public DrawingCanvasView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
         this.paint = ConfigurePaint(paint);
         this.gestureDetector = buildGestureDetector();
-        this.scaleDetector = new ScaleGestureDetector(getContext(), new SquareScaleLister(this));
+        this.scaleDetector = new ScaleGestureDetector(getContext(), new FigureScaleGestureListener(this));
     }
 
     public void addSquare(Point centre) {
@@ -67,29 +82,32 @@ public class SquareDrawingCanvas extends View {
         square.Radius = 75;
         square.Color = this.rdm.nextInt();
 
-        this.squares.add(square);
+        this.figures.add(square);
     }
 
     private GestureDetector buildGestureDetector() {
         GestureDetector.OnGestureListener simpleOnGestureListener =
-                new SquareGestureDetectorListener(this);
+                new FigureGestureDetectorListener(this);
 
         return new GestureDetector(getContext(), simpleOnGestureListener);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 Point touchPoint = new Point((int)event.getX(), (int) event.getY());
-                this.currentSquare = this.selectSquare(touchPoint);
+                this.currentFigure = this.selectFigure(touchPoint);
 
                 // Track the pointer that started the event.
                 this.initialGesturePointerId = event.getPointerId(event.getActionIndex());
 
                 break;
             case MotionEvent.ACTION_MOVE:
-                if(this.currentSquare == null) {
+                if(this.currentFigure == null) {
                     break;
                 }
 
@@ -97,7 +115,7 @@ public class SquareDrawingCanvas extends View {
                 Point position = this.getCurrentPointerPosition(event, this.initialGesturePointerId);
 
                 if (position != null) {
-                    this.currentSquare.Centre = position;
+                    this.currentFigure.Centre = position;
                 }
 
                 break;
@@ -106,7 +124,7 @@ public class SquareDrawingCanvas extends View {
                 if (event.getPointerId(event.getActionIndex()) == this.initialGesturePointerId)
                 {
                     this.initialGesturePointerId = -1;
-                    this.currentSquare = null;
+                    this.currentFigure = null;
                 }
 
                 break;
@@ -121,20 +139,33 @@ public class SquareDrawingCanvas extends View {
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void onDraw(Canvas canvas) {
-        // Draw the stored squares.
-        for (Square square : squares) {
-            paint.setColor(square.Color);
+        // TODO: Refactor to adapt to different figure types.
+        // Draw the stored figures.
+        for (Figure figure : figures) {
+            paint.setColor(figure.Color);
 
-            canvas.drawRect(
-                    square.Centre.x - square.Radius,
-                    square.Centre.y - square.Radius,
-                    square.Centre.x + square.Radius,
-                    square.Centre.y + square.Radius, paint);
+            if (figure instanceof Square) {
+                Square square = (Square) figure;
+
+                canvas.drawRect(
+                        square.Centre.x - square.Radius,
+                        square.Centre.y - square.Radius,
+                        square.Centre.x + square.Radius,
+                        square.Centre.y + square.Radius, paint);
+            }
         }
     }
 
+    /**
+     * Performs the initial configuration of the {@link Paint} used in the canvas to draw figures.
+     * @param paint The paint to configure.
+     * @return The configured paint.
+     */
     private static Paint ConfigurePaint(Paint paint) {
         paint.setAntiAlias(true);
         paint.setStrokeWidth(6f);
@@ -145,18 +176,28 @@ public class SquareDrawingCanvas extends View {
         return paint;
     }
 
-    private Square selectSquare(Point touchPoint) {
-
-        for (Square s : this.squares) {
-            if(s.isPointInFigureArea(touchPoint)) {
-                return s;
+    /**
+     * From a given touch points, determines which figure was selected.
+     * @param touchPoint The point where the user has touched.
+     * @return The figure, if any, that was selected by the touch point. Otherwise returns null.
+     */
+    private Figure selectFigure(Point touchPoint) {
+        for (Figure f : this.figures) {
+            if (f.isPointInFigureArea(touchPoint)) {
+                return f;
             }
         }
 
         return null;
     }
 
-
+    /**
+     * Determines the position of a pointer, given its id, in a given {@link MotionEvent}.
+     * @param event The event in which to locate the pointer.
+     * @param pointerId The identifier of the pointer to locate.
+     * @return The position of the pointer id, if it was present on the motion event.
+     *         Otherwise, returns null.
+     */
     private Point getCurrentPointerPosition(MotionEvent event, int pointerId) {
         try {
             MotionEvent.PointerCoords pCoords = new MotionEvent.PointerCoords();
@@ -174,19 +215,19 @@ public class SquareDrawingCanvas extends View {
         }
     }
 
-    private class SquareScaleLister
+    private class FigureScaleGestureListener
             extends ScaleGestureDetector.SimpleOnScaleGestureListener
     {
-        private SquareDrawingCanvas squareDrawingCanvas;
+        private DrawingCanvasView drawingCanvasView;
 
-        public SquareScaleLister(SquareDrawingCanvas squareDrawingCanvas) {
-            this.squareDrawingCanvas = squareDrawingCanvas;
+        public FigureScaleGestureListener(DrawingCanvasView drawingCanvasView) {
+            this.drawingCanvasView = drawingCanvasView;
         }
 
         @Override
         public boolean onScale(ScaleGestureDetector detector) {
-            if (this.squareDrawingCanvas.currentSquare != null) {
-                this.squareDrawingCanvas.currentSquare.scaleFigure(detector.getScaleFactor());
+            if (this.drawingCanvasView.currentFigure != null) {
+                this.drawingCanvasView.currentFigure.scaleFigure(detector.getScaleFactor());
 
                 invalidate();
             }
