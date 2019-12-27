@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import dim.drawingapp.Figures.*;
+
 public class SquareDrawingCanvas extends View {
     private final GestureDetector gestureDetector;
 
@@ -146,7 +148,7 @@ public class SquareDrawingCanvas extends View {
     private Square selectSquare(Point touchPoint) {
 
         for (Square s : this.squares) {
-            if(s.isPointInSquareArea(touchPoint)) {
+            if(s.isPointInFigureArea(touchPoint)) {
                 return s;
             }
         }
@@ -184,7 +186,7 @@ public class SquareDrawingCanvas extends View {
         @Override
         public boolean onScale(ScaleGestureDetector detector) {
             if (this.squareDrawingCanvas.currentSquare != null) {
-                this.squareDrawingCanvas.currentSquare.scaleSquare(detector.getScaleFactor());
+                this.squareDrawingCanvas.currentSquare.scaleFigure(detector.getScaleFactor());
 
                 invalidate();
             }
