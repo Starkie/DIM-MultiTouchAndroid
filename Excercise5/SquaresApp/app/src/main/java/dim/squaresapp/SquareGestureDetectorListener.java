@@ -20,9 +20,4 @@ public class SquareGestureDetectorListener extends SimpleOnGestureListener {
 
         return true;
     }
-
-    @Override
-    public boolean onDown(MotionEvent e) {
-        return super.onDown(e);
-    }
 }

@@ -85,6 +85,10 @@ public class SquareDrawingCanvas extends View {
                 this.currentSquare = this.selectSquare(touchPoint);
 
                 break;
+            case MotionEvent.ACTION_MOVE:
+                if(this.currentSquare != null) {
+                    this.currentSquare.Centre = new Point((int)event.getX(), (int) event.getY());
+                }
         }
 
         this.gestureDetector.onTouchEvent(event);
