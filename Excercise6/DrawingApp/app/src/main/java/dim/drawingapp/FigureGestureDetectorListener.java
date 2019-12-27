@@ -16,7 +16,13 @@ public class FigureGestureDetectorListener extends SimpleOnGestureListener {
     @Override
     public boolean onDoubleTap(MotionEvent e) {
         Point touchCentre = new Point((int)e.getX(), (int)e.getY());
-        this.parentView.addSquare(touchCentre);
+
+        switch (this.parentView.currentDrawingFigureMode) {
+            case Square:
+                this.parentView.addSquare(touchCentre);
+
+                break;
+        }
 
         return true;
     }

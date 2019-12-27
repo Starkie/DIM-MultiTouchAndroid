@@ -39,6 +39,9 @@ public class DrawingCanvasView extends View {
     // The figure that is currently selected.
     Figure currentFigure;
 
+    // Represents the currently active figure that will be drawn on user interaction.
+    FigureCategory currentDrawingFigureMode = FigureCategory.Square;
+
     // The pointer ID that initiated the current gesture. Used to track the movement of figures.
     private int initialGesturePointerId;
 
@@ -75,11 +78,16 @@ public class DrawingCanvasView extends View {
         this.scaleDetector = new ScaleGestureDetector(getContext(), new FigureScaleGestureListener(this));
     }
 
+    /**
+     * Adds a {@link Square} figure to the current canvas.
+     * @param centre The centre of the square to draw.
+     */
     public void addSquare(Point centre) {
         Square square = new Square();
 
         square.Centre = centre;
         square.Radius = 75;
+        // TODO: Add a color picker. See: https://github.com/QuadFlask/colorpicker
         square.Color = this.rdm.nextInt();
 
         this.figures.add(square);
