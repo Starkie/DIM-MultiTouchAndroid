@@ -5,7 +5,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
-import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -185,26 +184,5 @@ public class DrawingCanvasView extends View {
         }
 
         return null;
-    }
-
-    private class FigureScaleGestureListener
-            extends ScaleGestureDetector.SimpleOnScaleGestureListener
-    {
-        private DrawingCanvasView drawingCanvasView;
-
-        public FigureScaleGestureListener(DrawingCanvasView drawingCanvasView) {
-            this.drawingCanvasView = drawingCanvasView;
-        }
-
-        @Override
-        public boolean onScale(ScaleGestureDetector detector) {
-            if (this.drawingCanvasView.currentFigure != null) {
-                this.drawingCanvasView.currentFigure.scaleFigure(detector.getScaleFactor());
-
-                invalidate();
-            }
-
-            return true;
-        }
     }
 }
