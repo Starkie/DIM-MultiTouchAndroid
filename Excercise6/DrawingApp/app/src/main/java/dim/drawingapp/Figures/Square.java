@@ -17,6 +17,11 @@ public class Square extends Figure {
      */
     public float Radius;
 
+    public Square(Point centre) {
+        this.Centre = centre;
+        this.Radius = 75;
+    }
+
     /**
      * {@inheritDoc}
      */

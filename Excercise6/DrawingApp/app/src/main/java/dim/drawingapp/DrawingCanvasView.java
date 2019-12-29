@@ -80,33 +80,14 @@ public class DrawingCanvasView extends View {
     }
 
     /**
-     * Adds a {@link Square} figure to the current canvas.
-     * @param centre The centre of the square to draw.
-     */
-    public void addSquare(Point centre) {
-        Square square = new Square();
-
-        square.Centre = centre;
-        square.Radius = 75;
-        // TODO: Add a color picker. See: https://github.com/QuadFlask/colorpicker
-        square.Color = this.rdm.nextInt();
-
-        this.figures.add(square);
-    }
-
-    /**
      * Adds a {@link Circle} figure to the current canvas.
-     * @param centre The centre of the circle to draw.
+     * @param figure The figure to add to the canvas.
      */
-    public void addCircle(Point centre) {
-        Circle circle = new Circle();
-
-        circle.Centre = centre;
-        circle.Radius = 75;
+    public void addFigure(Figure figure) {
         // TODO: Add a color picker. See: https://github.com/QuadFlask/colorpicker
-        circle.Color = this.rdm.nextInt();
+        figure.Color = this.rdm.nextInt();
 
-        this.figures.add(circle);
+        this.figures.add(figure);
     }
 
     private GestureDetector buildGestureDetector() {

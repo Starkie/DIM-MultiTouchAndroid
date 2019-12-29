@@ -17,6 +17,11 @@ public class Circle extends Figure {
      */
     public float Radius;
 
+    public Circle(Point centre) {
+        this.Centre = centre;
+        this.Radius = 75;
+    }
+
     /**
      * {@inheritDoc}
      */

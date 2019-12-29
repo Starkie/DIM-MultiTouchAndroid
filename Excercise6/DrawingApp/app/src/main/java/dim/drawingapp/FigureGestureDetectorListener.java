@@ -4,6 +4,8 @@ import android.graphics.Point;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
 
+import dim.drawingapp.Figures.*;
+
 public class FigureGestureDetectorListener extends SimpleOnGestureListener {
 
     private DrawingCanvasView parentView;
@@ -17,15 +19,21 @@ public class FigureGestureDetectorListener extends SimpleOnGestureListener {
     public boolean onDoubleTap(MotionEvent e) {
         Point touchCentre = new Point((int)e.getX(), (int)e.getY());
 
+        Figure figure = null;
+
         switch (this.parentView.currentDrawingFigureMode) {
             case Square:
-                this.parentView.addSquare(touchCentre);
+                figure = new Square(touchCentre);
 
                 break;
             case Circle:
-                this.parentView.addCircle(touchCentre);
+                figure = new Circle(touchCentre);
 
                 break;
+        }
+
+        if (figure != null) {
+            this.parentView.addFigure(figure);
         }
 
         return true;
