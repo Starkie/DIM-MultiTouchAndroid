@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Random;
 
 import dim.drawingapp.Figures.*;
+import dim.drawingapp.utils.TouchPointerUtils;
 
 /**
  * A view that enables the drawing of figures in it.
@@ -117,7 +118,7 @@ public class DrawingCanvasView extends View {
                 }
 
                 // Use only the tracked pointer to move the square. Ignore the others.
-                Point position = this.getCurrentPointerPosition(event, this.initialGesturePointerId);
+                Point position = TouchPointerUtils.getCurrentPointerPosition(event, this.initialGesturePointerId);
 
                 if (position != null) {
                     this.currentFigure.Centre = position;
@@ -184,30 +185,6 @@ public class DrawingCanvasView extends View {
         }
 
         return null;
-    }
-
-    /**
-     * Determines the position of a pointer, given its id, in a given {@link MotionEvent}.
-     * @param event The event in which to locate the pointer.
-     * @param pointerId The identifier of the pointer to locate.
-     * @return The position of the pointer id, if it was present on the motion event.
-     *         Otherwise, returns null.
-     */
-    private Point getCurrentPointerPosition(MotionEvent event, int pointerId) {
-        try {
-            MotionEvent.PointerCoords pCoords = new MotionEvent.PointerCoords();
-
-            // To obtain the pointer coordinates, we need the pointer's index in the event.
-            int pointerIndex = event.findPointerIndex(pointerId);
-            event.getPointerCoords(pointerIndex, pCoords);
-
-            return new Point((int) pCoords.x, (int) pCoords.y);
-        }
-        catch (IllegalArgumentException e)
-        {
-            // The pointer does not exist anymore.
-            return null;
-        }
     }
 
     private class FigureScaleGestureListener
