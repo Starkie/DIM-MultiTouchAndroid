@@ -152,20 +152,10 @@ public class DrawingCanvasView extends View {
      */
     @Override
     protected void onDraw(Canvas canvas) {
-        // TODO: Refactor to adapt to different figure types.
-        // Draw the stored figures.
         for (Figure figure : figures) {
             paint.setColor(figure.Color);
 
-            if (figure instanceof Square) {
-                Square square = (Square) figure;
-
-                canvas.drawRect(
-                        square.Centre.x - square.Radius,
-                        square.Centre.y - square.Radius,
-                        square.Centre.x + square.Radius,
-                        square.Centre.y + square.Radius, paint);
-            }
+            figure.drawFigure(canvas, this.paint);
         }
     }
 

@@ -1,5 +1,7 @@
 package dim.drawingapp.Figures;
 
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.Point;
 
 /**
@@ -28,4 +30,11 @@ public abstract class Figure {
      * @return A boolean value indicating whether the point is in the figure's area.
      */
     public abstract boolean isPointInFigureArea(Point point);
+
+    /**
+     * Draws the figure in the given canvas.
+     * @param canvas The canvas where to draw the figure.
+     * @param paint The paint to configure the figure drawn.
+     */
+    public abstract void drawFigure(Canvas canvas, Paint paint);
 }

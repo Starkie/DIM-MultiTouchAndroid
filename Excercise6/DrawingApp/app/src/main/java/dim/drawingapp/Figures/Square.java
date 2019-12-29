@@ -1,5 +1,7 @@
 package dim.drawingapp.Figures;
 
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.Point;
 
 /**
@@ -18,6 +20,7 @@ public class Square extends Figure {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void scaleFigure(float scaleFactor) {
         float auxRadius = scaleFactor * Radius;
         auxRadius = Math.max(MIN_SQUARE_RADIUS, auxRadius);
@@ -29,10 +32,24 @@ public class Square extends Figure {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isPointInFigureArea(Point point) {
         return point.x <= (this.Centre.x + this.Radius) &&
                 point.x >= (this.Centre.x - this.Radius) &&
                 point.y <= (this.Centre.y + this.Radius) &&
                 point.y >= (this.Centre.y - this.Radius);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void drawFigure(Canvas canvas, Paint paint) {
+        canvas.drawRect(
+                this.Centre.x - this.Radius,
+                this.Centre.y - this.Radius,
+                this.Centre.x + this.Radius,
+                this.Centre.y + this.Radius,
+                paint);
     }
 }
