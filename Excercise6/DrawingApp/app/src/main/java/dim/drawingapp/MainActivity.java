@@ -16,6 +16,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.main);
 
         this.drawingCanvasView = this.findViewById(R.id.drawingCanvas);
+        // TODO: Implement a remove mode.
+        // TODO: Triangle, Circle.
+        // TODO: COlor picker.
     }
 
     public void switchToSquareMode(View view) {
@@ -24,5 +27,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void switchToLineMode(View view) {
         this.drawingCanvasView.currentDrawingFigureMode = FigureCategory.Line;
+    }
+
+    public void switchToCircleMode(View view) {
+        this.drawingCanvasView.currentDrawingFigureMode = FigureCategory.Circle;
     }
 }

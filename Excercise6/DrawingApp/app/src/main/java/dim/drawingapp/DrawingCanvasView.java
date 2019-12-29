@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -91,6 +92,21 @@ public class DrawingCanvasView extends View {
         square.Color = this.rdm.nextInt();
 
         this.figures.add(square);
+    }
+
+    /**
+     * Adds a {@link Circle} figure to the current canvas.
+     * @param centre The centre of the circle to draw.
+     */
+    public void addCircle(Point centre) {
+        Circle circle = new Circle();
+
+        circle.Centre = centre;
+        circle.Radius = 75;
+        // TODO: Add a color picker. See: https://github.com/QuadFlask/colorpicker
+        circle.Color = this.rdm.nextInt();
+
+        this.figures.add(circle);
     }
 
     private GestureDetector buildGestureDetector() {

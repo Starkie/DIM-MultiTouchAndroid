@@ -22,6 +22,10 @@ public class FigureGestureDetectorListener extends SimpleOnGestureListener {
                 this.parentView.addSquare(touchCentre);
 
                 break;
+            case Circle:
+                this.parentView.addCircle(touchCentre);
+
+                break;
         }
 
         return true;

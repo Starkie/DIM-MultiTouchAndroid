@@ -13,6 +13,14 @@
             android:orientation="horizontal">
 
             <Button
+                android:id="@+id/lineButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="switchToCircleMode"
+                android:text="Line" />
+
+            <Button
                 android:id="@+id/squareButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -21,12 +29,12 @@
                 android:text="Square" />
 
             <Button
-                android:id="@+id/lineButton"
+                android:id="@+id/circleButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:onClick="switchToLineMode"
-                android:text="Line" />
+                android:text="Circle" />
+
         </LinearLayout>
 
         <dim.drawingapp.DrawingCanvasView

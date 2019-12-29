@@ -5,5 +5,6 @@ package dim.drawingapp.Figures;
  */
 public enum FigureCategory {
     Square,
+    Circle,
     Line
 }
