@@ -13,7 +13,6 @@ import android.view.View;
 import androidx.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import dim.drawingapp.Figures.*;
 import dim.drawingapp.utils.TouchPointerUtils;
@@ -34,8 +33,8 @@ public class DrawingCanvasView extends View {
     // Stores the configuration for the figure to draw.
     Paint paint = new Paint();
 
-    // Random number generator, to obtain the color of the current figure.
-    Random rdm = new Random();
+    // Current color.
+    int currentColor = Color.BLACK;
 
     // The figure that is currently selected.
     Figure currentFigure;
@@ -84,8 +83,7 @@ public class DrawingCanvasView extends View {
      * @param figure The figure to add to the canvas.
      */
     public void addFigure(Figure figure) {
-        // TODO: Add a color picker. See: https://github.com/QuadFlask/colorpicker
-        figure.Color = this.rdm.nextInt();
+        figure.Color = this.currentColor;
 
         this.figures.add(figure);
     }
@@ -116,7 +114,7 @@ public class DrawingCanvasView extends View {
                     break;
                 }
 
-                // Use only the tracked pointer to move the square. Ignore the others.
+                // Use only the tracked pointer to move the figure. Ignore the others.
                 Point position = TouchPointerUtils.getCurrentPointerPosition(event, this.initialGesturePointerId);
 
                 if (position != null) {
@@ -125,7 +123,7 @@ public class DrawingCanvasView extends View {
 
                 break;
             case MotionEvent.ACTION_POINTER_UP:
-                // If the initial pointer is removed, stop tracking the square.
+                // If the initial pointer is removed, stop tracking the figure.
                 if (event.getPointerId(event.getActionIndex()) == this.initialGesturePointerId)
                 {
                     this.initialGesturePointerId = -1;

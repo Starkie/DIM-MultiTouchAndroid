@@ -10,15 +10,16 @@ public class MainActivity extends AppCompatActivity {
 
     private DrawingCanvasView drawingCanvasView;
 
+    private ColorPicker colorPicker;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
         this.drawingCanvasView = this.findViewById(R.id.drawingCanvas);
-        // TODO: Implement a remove mode.
+        this.colorPicker = new ColorPicker(this.drawingCanvasView);
         // TODO: Triangle, Circle.
-        // TODO: COlor picker.
     }
 
     public void switchToSquareMode(View view) {
@@ -31,5 +32,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void switchToCircleMode(View view) {
         this.drawingCanvasView.currentDrawingFigureMode = FigureCategory.Circle;
+    }
+
+    public void changeDrawColor(View view) {
+        this.colorPicker.showColorPicker(this);
     }
 }
