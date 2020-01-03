@@ -15,17 +15,17 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/lineButton"
+                android:id="@+id/handDrawnLineButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:onClick="switchToCircleMode"
-                android:text="Line" />
+                android:onClick="switchToHandDrawnLineMode"
+                android:text="Hand drawn line" />
 
             <Button
                 android:id="@+id/squareButton"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:onClick="switchToSquareMode"
                 android:text="Square" />
@@ -33,7 +33,7 @@
             <Button
                 android:id="@+id/circleButton"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:onClick="switchToCircleMode"
                 android:text="Circle" />

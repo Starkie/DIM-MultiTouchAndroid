@@ -1,6 +1,7 @@
 package dim.drawingapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.view.View;
 
@@ -19,15 +20,14 @@ public class MainActivity extends AppCompatActivity {
 
         this.drawingCanvasView = this.findViewById(R.id.drawingCanvas);
         this.colorPicker = new ColorPicker(this.drawingCanvasView);
-        // TODO: Triangle, Circle.
     }
 
     public void switchToSquareMode(View view) {
         this.drawingCanvasView.currentDrawingFigureMode = FigureCategory.Square;
     }
 
-    public void switchToLineMode(View view) {
-        this.drawingCanvasView.currentDrawingFigureMode = FigureCategory.Line;
+    public void switchToHandDrawnLineMode(View view) {
+        this.drawingCanvasView.currentDrawingFigureMode = FigureCategory.HandDrawnLine;
     }
 
     public void switchToCircleMode(View view) {

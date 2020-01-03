@@ -103,7 +103,17 @@ public class DrawingCanvasView extends View {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 Point touchPoint = new Point((int)event.getX(), (int) event.getY());
-                this.currentFigure = this.selectFigure(touchPoint);
+
+                if (this.currentDrawingFigureMode == FigureCategory.HandDrawnLine) {
+                    HandDrawnLine handDrawnLine = new HandDrawnLine(touchPoint);
+
+                    this.addFigure(handDrawnLine);
+
+                    this.currentFigure = handDrawnLine;
+                }
+                else {
+                    this.currentFigure = this.selectFigure(touchPoint);
+                }
 
                 // Track the pointer that started the event.
                 this.initialGesturePointerId = event.getPointerId(event.getActionIndex());
@@ -117,7 +127,11 @@ public class DrawingCanvasView extends View {
                 // Use only the tracked pointer to move the figure. Ignore the others.
                 Point position = TouchPointerUtils.getCurrentPointerPosition(event, this.initialGesturePointerId);
 
-                if (position != null) {
+                if (this.currentFigure instanceof HandDrawnLine)
+                {
+                     ((HandDrawnLine) this.currentFigure).LinePath.lineTo(position.x, position.y);
+                }
+                else if (position != null) {
                     this.currentFigure.Centre = position;
                 }
 
