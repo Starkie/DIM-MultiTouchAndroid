@@ -5,7 +5,7 @@ import android.graphics.Paint;
 import android.graphics.Point;
 
 /**
- * A representing a square.
+ * A {@link Figure} representing a square.
  */
 public class Square extends Figure {
     private static final float MIN_SQUARE_RADIUS = 25;
