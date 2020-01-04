@@ -176,6 +176,15 @@ public class DrawingCanvasView extends View {
      */
     @Override
     protected void onDraw(Canvas canvas) {
+        // Draw canvas background.
+        // This is needed so the saved image has a background.
+        this.paint.setColor(Color.WHITE);
+        this.paint.setStyle(Paint.Style.FILL);
+        canvas.drawRect(0 ,0, this.getWidth(), this.getHeight(), this.paint);
+
+        // Restore the stroke mode.
+        this.paint.setStyle(Paint.Style.STROKE);
+
         for (Figure figure : figures) {
             paint.setColor(figure.Color);
 
