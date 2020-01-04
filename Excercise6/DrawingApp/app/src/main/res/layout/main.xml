@@ -30,6 +30,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
+                android:background="@drawable/button_highlight_states"
                 android:contentDescription="Hand drawn line"
                 android:maxHeight="60dip"
                 android:onClick="switchToHandDrawnLineMode"
@@ -43,6 +44,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
+                android:background="@drawable/button_highlight_states"
                 android:maxHeight="60dip"
                 android:onClick="switchToSquareMode"
                 android:scaleType="fitCenter"
@@ -55,6 +57,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
+                android:background="@drawable/button_highlight_states"
                 android:maxHeight="60dip"
                 android:onClick="switchToCircleMode"
                 android:scaleType="fitCenter"
@@ -67,6 +70,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
+                android:background="@drawable/button_highlight_states"
                 android:maxHeight="60dip"
                 android:onClick="changeDrawColor"
                 android:scaleType="fitCenter"
@@ -74,7 +78,7 @@
 
         </LinearLayout>
 
-        <dim.drawingapp.DrawingCanvasView
+        <dim.drawingapp.canvas.DrawingCanvasView
             android:id="@+id/drawingCanvas"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
