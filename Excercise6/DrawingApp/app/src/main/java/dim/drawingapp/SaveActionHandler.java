@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.media.MediaScannerConnection;
 import android.os.Environment;
 import android.widget.Toast;
 
@@ -44,6 +45,9 @@ public class SaveActionHandler {
 
             return false;
         }
+
+        // Scan the file so it appears in the gallery.
+        MediaScannerConnection.scanFile(this.parentActivity, new String[] { file.getPath() }, new String[] { "image/jpeg" }, null);
 
         return true;
     }
