@@ -1,6 +1,7 @@
 package dim.drawingapp;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -86,6 +87,20 @@ public class DrawingCanvasView extends View {
         figure.Color = this.currentColor;
 
         this.figures.add(figure);
+    }
+
+    /**
+     * Exports the current canvas to a bitmap, so it can be persisted.
+     * @return The current drawing state as a bitmap.
+     */
+    public Bitmap exportToBitmap()
+    {
+        Bitmap bitmap = Bitmap.createBitmap(this.getWidth(), this.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+
+        this.draw(canvas);
+
+        return bitmap;
     }
 
     private GestureDetector buildGestureDetector() {
