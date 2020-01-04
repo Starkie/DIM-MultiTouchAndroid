@@ -30,6 +30,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
+                android:contentDescription="Hand drawn line"
+                android:maxHeight="60dip"
                 android:onClick="switchToHandDrawnLineMode"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_pencil" />
@@ -41,6 +43,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
+                android:maxHeight="60dip"
                 android:onClick="switchToSquareMode"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_crop_square_24px" />
@@ -52,6 +55,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
+                android:maxHeight="60dip"
                 android:onClick="switchToCircleMode"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_circle" />
@@ -63,6 +67,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
+                android:maxHeight="60dip"
                 android:onClick="changeDrawColor"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_palette" />
