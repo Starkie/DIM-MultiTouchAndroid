@@ -1,4 +1,4 @@
-package dim.drawingapp;
+package dim.drawingapp.canvas;
 
 import android.graphics.Point;
 import android.view.GestureDetector.SimpleOnGestureListener;

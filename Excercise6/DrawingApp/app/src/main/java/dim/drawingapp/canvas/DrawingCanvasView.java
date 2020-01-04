@@ -1,4 +1,4 @@
-package dim.drawingapp;
+package dim.drawingapp.canvas;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -22,6 +22,12 @@ import dim.drawingapp.utils.TouchPointerUtils;
  * A view that enables the drawing of figures in it.
  */
 public class DrawingCanvasView extends View {
+    // Current color.
+    public int currentColor = Color.BLACK;
+
+    // Represents the currently active figure that will be drawn on user interaction.
+    public FigureCategory currentDrawingFigureMode = FigureCategory.Square;
+
     // Handler for basic gestures.
     private final GestureDetector gestureDetector;
 
@@ -34,14 +40,8 @@ public class DrawingCanvasView extends View {
     // Stores the configuration for the figure to draw.
     Paint paint = new Paint();
 
-    // Current color.
-    int currentColor = Color.BLACK;
-
     // The figure that is currently selected.
     Figure currentFigure;
-
-    // Represents the currently active figure that will be drawn on user interaction.
-    FigureCategory currentDrawingFigureMode = FigureCategory.Square;
 
     // The pointer ID that initiated the current gesture. Used to track the movement of figures.
     private int initialGesturePointerId;

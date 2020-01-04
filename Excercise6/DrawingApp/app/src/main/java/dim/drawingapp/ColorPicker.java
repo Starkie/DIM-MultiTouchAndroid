@@ -8,6 +8,8 @@ import com.skydoves.colorpickerview.ColorEnvelope;
 import com.skydoves.colorpickerview.ColorPickerDialog;
 import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener;
 
+import dim.drawingapp.canvas.DrawingCanvasView;
+
 public class ColorPicker {
     private DrawingCanvasView drawingCanvasView;
 

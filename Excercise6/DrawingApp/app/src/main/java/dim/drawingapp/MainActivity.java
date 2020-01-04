@@ -3,28 +3,16 @@ package dim.drawingapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
 
-import android.Manifest;
-import android.app.Activity;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import android.widget.ImageButton;
 
 import dim.drawingapp.Figures.FigureCategory;
+import dim.drawingapp.canvas.DrawingCanvasView;
 
 public class MainActivity extends AppCompatActivity {
 
