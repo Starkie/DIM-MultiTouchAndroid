@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class HandDrawnLine extends Figure {
     // The max acceptable rounding error.
-    public static final double EPSILON = 7.5;
+    public static final double EPSILON = 10;
 
     // The points that compose this hand drawn line.
     public Path LinePath;
