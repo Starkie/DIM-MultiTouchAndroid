@@ -26,7 +26,7 @@ public class DrawingCanvasView extends View {
     public int currentColor = Color.BLACK;
 
     // Represents the currently active figure that will be drawn on user interaction.
-    public FigureCategory currentDrawingFigureMode = FigureCategory.Square;
+    public CurrentFigureMode currentDrawingFigureMode = CurrentFigureMode.Square;
 
     // Handler for basic gestures.
     private final GestureDetector gestureDetector;
@@ -119,7 +119,7 @@ public class DrawingCanvasView extends View {
             case MotionEvent.ACTION_DOWN:
                 Point touchPoint = new Point((int)event.getX(), (int) event.getY());
 
-                if (this.currentDrawingFigureMode == FigureCategory.HandDrawnLine) {
+                if (this.currentDrawingFigureMode == CurrentFigureMode.HandDrawnLine) {
                     HandDrawnLine handDrawnLine = new HandDrawnLine(touchPoint);
 
                     this.addFigure(handDrawnLine);
@@ -135,16 +135,17 @@ public class DrawingCanvasView extends View {
 
                 break;
             case MotionEvent.ACTION_MOVE:
-                if(this.currentFigure == null) {
+                if (this.currentFigure == null || this.currentDrawingFigureMode == CurrentFigureMode.Delete) {
                     break;
                 }
 
                 // Use only the tracked pointer to move the figure. Ignore the others.
                 Point position = TouchPointerUtils.getCurrentPointerPosition(event, this.initialGesturePointerId);
 
-                if (this.currentFigure instanceof HandDrawnLine)
+                if (this.currentDrawingFigureMode == CurrentFigureMode.HandDrawnLine
+                    && this.currentFigure instanceof HandDrawnLine)
                 {
-                     ((HandDrawnLine) this.currentFigure).LinePath.lineTo(position.x, position.y);
+                     ((HandDrawnLine) this.currentFigure).lineTo(position);
                 }
                 else if (position != null) {
                     this.currentFigure.Centre = position;
@@ -212,7 +213,7 @@ public class DrawingCanvasView extends View {
      * @param touchPoint The point where the user has touched.
      * @return The figure, if any, that was selected by the touch point. Otherwise returns null.
      */
-    private Figure selectFigure(Point touchPoint) {
+    Figure selectFigure(Point touchPoint) {
         for (Figure f : this.figures) {
             if (f.isPointInFigureArea(touchPoint)) {
                 return f;

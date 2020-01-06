@@ -8,11 +8,11 @@ import dim.drawingapp.Figures.*;
 
 public class FigureGestureDetectorListener extends SimpleOnGestureListener {
 
-    private DrawingCanvasView parentView;
+    private DrawingCanvasView drawingCanvas;
 
-    public FigureGestureDetectorListener(DrawingCanvasView parentView)
+    public FigureGestureDetectorListener(DrawingCanvasView drawingCanvas)
     {
-        this.parentView = parentView;
+        this.drawingCanvas = drawingCanvas;
     }
 
     @Override
@@ -21,7 +21,7 @@ public class FigureGestureDetectorListener extends SimpleOnGestureListener {
 
         Figure figure = null;
 
-        switch (this.parentView.currentDrawingFigureMode) {
+        switch (this.drawingCanvas.currentDrawingFigureMode) {
             case Square:
                 figure = new Square(touchCentre);
 
@@ -30,12 +30,27 @@ public class FigureGestureDetectorListener extends SimpleOnGestureListener {
                 figure = new Circle(touchCentre);
 
                 break;
+
         }
 
         if (figure != null) {
-            this.parentView.addFigure(figure);
+            this.drawingCanvas.addFigure(figure);
         }
 
         return true;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent e) {
+        Point touchCentre = new Point((int)e.getX(), (int)e.getY());
+
+        switch (this.drawingCanvas.currentDrawingFigureMode) {
+            case Delete:
+                Figure selectedFigure = this.drawingCanvas.selectFigure(touchCentre);
+                this.drawingCanvas.figures.remove(selectedFigure);
+
+                break;
+        }
+
     }
 }

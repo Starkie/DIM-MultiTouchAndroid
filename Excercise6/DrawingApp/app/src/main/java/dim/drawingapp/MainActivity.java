@@ -5,9 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.ColorFilter;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,7 +13,7 @@ import android.widget.ImageButton;
 
 import java.util.HashMap;
 
-import dim.drawingapp.Figures.FigureCategory;
+import dim.drawingapp.Figures.CurrentFigureMode;
 import dim.drawingapp.canvas.DrawingCanvasView;
 
 public class MainActivity extends AppCompatActivity {
@@ -26,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private ColorPicker colorPicker;
     private SaveActionHandler saveActionHandler;
 
-    private HashMap<FigureCategory, ImageButton> imageButtonsHashMap;
+    private HashMap<CurrentFigureMode, ImageButton> imageButtonsHashMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,27 +38,30 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(myToolbar);
 
         this.imageButtonsHashMap = new HashMap<>();
-        this.imageButtonsHashMap.put(FigureCategory.HandDrawnLine, (ImageButton) findViewById(R.id.handDrawnLineButton));
-        this.imageButtonsHashMap.put(FigureCategory.Circle, (ImageButton) findViewById(R.id.circleButton));
-        this.imageButtonsHashMap.put(FigureCategory.Square, (ImageButton) findViewById(R.id.squareButton));
+        this.imageButtonsHashMap.put(CurrentFigureMode.HandDrawnLine, (ImageButton) findViewById(R.id.handDrawnLineButton));
+        this.imageButtonsHashMap.put(CurrentFigureMode.Circle, (ImageButton) findViewById(R.id.circleButton));
+        this.imageButtonsHashMap.put(CurrentFigureMode.Square, (ImageButton) findViewById(R.id.squareButton));
+        this.imageButtonsHashMap.put(CurrentFigureMode.Delete, (ImageButton) findViewById(R.id.deleteButton));
 
-        this.switchFigureMode(FigureCategory.Square);
+        this.switchFigureMode(CurrentFigureMode.Square);
 
         // TODO: store the drawing state in the activity.
-        // TODO: add a save drawing button.
-        // TODO: add a delete figure mode.
     }
 
     public void switchToSquareMode(View view) {
-        this.switchFigureMode(FigureCategory.Square);
+        this.switchFigureMode(CurrentFigureMode.Square);
     }
 
     public void switchToHandDrawnLineMode(View view) {
-        this.switchFigureMode(FigureCategory.HandDrawnLine);
+        this.switchFigureMode(CurrentFigureMode.HandDrawnLine);
     }
 
     public void switchToCircleMode(View view) {
-        this.switchFigureMode(FigureCategory.Circle);
+        this.switchFigureMode(CurrentFigureMode.Circle);
+    }
+
+    public void switchToDeleteMode(View view) {
+        this.switchFigureMode(CurrentFigureMode.Delete);
     }
 
     @Override
@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
         this.colorPicker.showColorPicker(this);
     }
 
-    private void switchFigureMode(FigureCategory category) {
+    private void switchFigureMode(CurrentFigureMode category) {
         this.drawingCanvasView.currentDrawingFigureMode = category;
 
         for (ImageButton imageButton : imageButtonsHashMap.values())
@@ -96,10 +96,10 @@ public class MainActivity extends AppCompatActivity {
             imageButton.setActivated(false);
         }
 
-        ColorFilter colorFilter = new ColorFilter();
-        // colorFilter.
+        ImageButton button = this.imageButtonsHashMap.get(category);
 
-        this.imageButtonsHashMap.get(category)
-            .setActivated(true);
+        if (button != null) {
+            button.setActivated(true);
+        }
     }
 }
