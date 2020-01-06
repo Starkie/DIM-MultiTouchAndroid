@@ -12,8 +12,7 @@ import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 import androidx.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Stack;
 
 import dim.drawingapp.Figures.*;
 import dim.drawingapp.utils.TouchPointerUtils;
@@ -35,7 +34,7 @@ public class DrawingCanvasView extends View {
     private final ScaleGestureDetector scaleDetector;
 
     // Contains each figure to draw in the canvas.
-    List<Figure> figures = new ArrayList<>();
+    Stack<Figure> figures = new Stack<>();
 
     // Stores the configuration for the figure to draw.
     Paint paint = new Paint();
@@ -86,7 +85,7 @@ public class DrawingCanvasView extends View {
     public void addFigure(Figure figure) {
         figure.Color = this.currentColor;
 
-        this.figures.add(figure);
+        this.figures.push(figure);
     }
 
     /**
@@ -125,6 +124,10 @@ public class DrawingCanvasView extends View {
                     this.addFigure(handDrawnLine);
 
                     this.currentFigure = handDrawnLine;
+
+                    // Bring the current figure to the top of the stack.
+                    this.figures.remove(currentFigure);
+                    this.figures.push(currentFigure);
                 }
                 else {
                     this.currentFigure = this.selectFigure(touchPoint);
