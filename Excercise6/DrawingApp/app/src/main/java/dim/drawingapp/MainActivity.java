@@ -44,8 +44,6 @@ public class MainActivity extends AppCompatActivity {
         this.imageButtonsHashMap.put(CurrentFigureMode.Delete, (ImageButton) findViewById(R.id.deleteButton));
 
         this.switchFigureMode(CurrentFigureMode.Square);
-
-        // TODO: store the drawing state in the activity.
     }
 
     public void switchToSquareMode(View view) {
